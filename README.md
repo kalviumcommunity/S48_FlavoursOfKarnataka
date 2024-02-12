@@ -4,10 +4,10 @@ Description :- Karnataka is known for its rich cultural heritage and also offers
 
 
 some of the features are:-
-fresh seafood
-variety of meat preparation
-ambience
-chef's specials
-value of money
-cleanliness and hygiene
-authentic Karnataka cuisine
+fresh seafood,
+variety of meat preparation,
+ambience,
+chef's specials,
+value of money,
+cleanliness and hygiene,
+authentic Karnataka cuisine.
