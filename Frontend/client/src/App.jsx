@@ -1,27 +1,18 @@
-import React from 'react';
-import './App.css'; // Import CSS file
+// App.jsx
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import MainPage from "./component/MainPage";
+import SignUp from "./component/SignUp";
 
-function RestaurantWebsite() {
+function App() {
   return (
-    <div>
-      <div className="header">
-        <div className="title">
-          <h1>Spices with mixed masala: List of NON-VEG restaurants</h1>
-        </div>
-      </div>
-      <div className="logo">
-        <button>Search Places</button>
-      </div>
-      <div className="content">
-        <div className="description">
-          <h2>Description of NON-VEG:</h2>
-          <p>Food is for living but for non-vegetarian it is one of the best feeling to have a spicy and delicious tandoori, chicken curry, biryani
-            <br /> and all those make an non-vegetarian a satisfactory feel...
-          </p>
-        </div>
-      </div>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/SignUp" element={<SignUp />} />
+      </Routes>
+    </Router>
   );
 }
 
-export default RestaurantWebsite;
+export default App;
