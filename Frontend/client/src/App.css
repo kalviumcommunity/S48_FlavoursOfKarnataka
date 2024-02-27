@@ -1,55 +1,63 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: rgb(255, 138, 76);
-}
-
-.header {
-  text-align: center;
-  padding-right: 30px;
-  top: 20px;
-  left: 20px;
-  display: flex;
-  align-items: center;
-}
-
-.logo {
-  margin-right: 20px;
-  text-align: center;
-  padding-top: 50px;
-}
-
-.logo button {
-  padding: 20px 50px;
-  background-color: #cfffc1;
-  color: #3204ff;
-  font-size: x-large;
-  border: none;
-  border-radius: 15px;
-  cursor: pointer;
-  align-items: center;
-}
-
-.title h1 {
-  margin: 0;
-  font-size: 44px;
-  text-align: center;
-  padding-left: 200px;
-  padding-top: 80px;
-}
-
-.content {
-  margin-top: 80px; 
-  display: flex;
-  justify-content: space-evenly;
-}
-
-.description {
-  width: 50%;
-  text-align: center;
-  padding-left: 90px;
-  padding-top: 20px;
-  font-size: x-large;
-  font-style: italic;
-}
+/* Reset styles */
+body, html, #root {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  
+  /* Styles for router container */
+  #root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  /* Styles for main container */
+  .container {
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+  }
+  
+  /* Styles for navigation links */
+  .nav-links {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .nav-links li {
+    margin-right: 10px;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .nav-links a:hover {
+    color: #007bff;
+  }
+  
+  /* Styles for page content */
+  .page-content {
+    margin-top: 20px;
+  }
+  
+  /* Styles for buttons */
+  .btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn:hover {
+    background-color: #0056b3;
+  }
+  
