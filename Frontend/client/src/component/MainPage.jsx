@@ -12,7 +12,8 @@ function RestaurantWebsite() {
         </div>
       </div>
       <div className="logo">
-        <Link to="/SignUp">Sign up</Link> 
+        <Link to="/SignUp">Sign up</Link>
+        <Link to="/UserList">data</Link> 
       </div>
       <div className="content">
         <div className="description">
