@@ -1,80 +1,91 @@
 import React, { useState } from "react";
-import "./SignUp.css";
+import { useNavigate } from "react-router-dom";
+import './SignUp.css'
 
-function App() {
+function SignUp() {
+  const navigate = useNavigate();
 
-  const [field, setField] = useState({
-    firstName:"",
-    lastName:"",
-    email:"",
-    phoneNumber:""
+  const [formData, setFormData] = useState({
+    UserName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
-  const [submitted, setSubmit] = useState(false);
-  const [validate, setValidation] = useState(false);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Form submitted:", formData);
+
+    navigate("/");
+  };
 
   return (
-    <div className="form-container">
-      <form className="register-form" onSubmit={(e)=>{e.preventDefault();
-        if(field.firstName && field.lastName && field.email && field.phoneNumber)setValidation(true);
-        setSubmit(true)}}>
+    <div className="container">
+      <div className="signup-page">
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="UserName">Username:</label>
+          <input
+            type="text"
+            id="UserName"
+            name="UserName"
+            placeholder="Enter your username"
+            value={formData.UserName}
+            onChange={handleChange}
+            required
+          />
 
-        {submitted && validate?<div className="success-message">Registration succesfull!</div>:null}
+          <label htmlFor="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your email address"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
 
-        <input
-          id="first-name"
-          className="form-field"
-          type="text"
-          placeholder="First Name"
-          name="firstName"
-          value={field.firstName}
-          onChange={(e)=>{setField({...field, firstName:e.target.value})}}
-        />
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            value={formData.password}
+            onChange={handleChange}
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{10,}"
+            title="Password must contain at least 10 characters, including at least One Number, One Uppercase letter, One Lowercase letter and one Special Character."
+            required
+          />
 
-        {submitted && !field.firstName ?<span>Please enter your first name</span>:null}
-      
-        <input
-          id="last-name"
-          className="form-field"
-          type="text"
-          placeholder="Last Name"
-          name="lastName"
-          value={field.lastName}
-          onChange={(e)=>{setField({...field, lastName:e.target.value})}}
-        />
+          <label htmlFor="confirmPassword">Confirm Password:</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            placeholder="Confirm your password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            pattern={formData.password}
+            title="Passwords must match"
+            required
+          />
 
-        {submitted && !field.lastName ?<span>Please enter your last name</span>:null}
-       
-        <input
-          id="email"
-          className="form-field"
-          type="text"
-          placeholder="Email"
-          name="email"
-          value={field.email}
-          onChange={(e)=>{setField({...field, email:e.target.value})}}
-        />
-
-        {submitted && !field.email ?<span>Please enter your email</span>:null}
-
-        <input
-          id="Phone number"
-          className="form-field"
-          type="text"
-          placeholder="Phone number"
-          name="phone number"
-          value={field.phoneNumber}
-          onChange={(e)=>{setField({...field, phoneNumber:e.target.value})}}
-        />
-
-        {submitted && !field.phoneNumber ?<span>Please enter your phone number</span>:null}
-
-        <button className="form-field" type="submit">
-          Register
-        </button>
-      </form>
+          <button className="SignUpBtn" type="submit">
+            SIGN UP
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
 
-export default App;
+export default SignUp;
