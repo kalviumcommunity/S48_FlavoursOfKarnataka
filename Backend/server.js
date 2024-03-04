@@ -18,20 +18,24 @@ mongoose.connect("mongodb+srv://Bindhushree:Bindu%402005@cluster0.akxtu94.mongod
 app.use('/', routes);
 
 // Additional route
-app.get('/getuser', (req, res) => {
-  UserModel.find()
-    .then(data => {
-      console.log("Users:", data);
-      if (data.length === 0) {
-        return res.status(404).json({ error: "No users found" });
-      }
-      res.json(data);
-    })
-    .catch(err => {
-      console.error("Error fetching users:", err);
-      res.status(500).json({ error: "Internal server error" });
-    });
-});
+app.get('/', (req, res) => {
+  UserModel.find({})
+  .then(users => res.json(users))
+  .catch(err => res.json(err))
+})
+
+app.get('/getUser/:id', (req, res)=>{
+  const id = req.params.id;
+  UserModel.findById({_id:id})
+  .then(users => res.json(users))
+  .catch(err => res.json(err))
+})
+
+app.post("/createuser",(req, res)=>{
+  UserModel.create(req.body)
+  .then(users => res.json(users))
+  .catch(err => res.json(err))
+})
 
 // Default 404 route
 app.use((req, res) => res.status(404).send('Not found'));
