@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import '../component/UserData.css'; 
+import './UserData.css'; 
 
 export default function UserList() {
   const [users, setUsers] = useState([])
@@ -25,6 +25,7 @@ export default function UserList() {
               <th>fresh_seafood</th>
               <th>variety_of_meat_preparation</th>
               <th>ambience</th>
+              <th colSpan='2'>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -36,6 +37,8 @@ export default function UserList() {
                 <td>{data.fresh_seafood}</td>
                 <td>{data.variety_of_meat_preparation}</td>
                 <td>{data.ambience}</td>
+                <td><Link to={`/update/${data._id}`}><button>Update</button></Link> </td>
+                <td><button>Delete</button></td>
               </tr>
             ))}
           </tbody>

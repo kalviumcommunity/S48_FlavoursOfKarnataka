@@ -3,15 +3,15 @@ import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 
 function CreateUser(){
-    const [name, setName] = useState()
-    const [location, setlocation] = useState()
-    const [speciality, setspeciality] = useState()
-    const [payment, setpayment] = useState()
-    const navigate = useNavigate()
+    const [resturant_name, setResturantName] = useState(""); // Corrected state variable name
+    const [location, setLocation] = useState("");
+    const [speciality, setSpeciality] = useState("");
+    const [fresh_seafood, setFreshSeafood] = useState("");
+    const navigate = useNavigate();
 
     const Submit = (e) =>{
         e.preventDefault();
-        axios.post("http://localhost:3000/createUser", {name, location, speciality, payment})
+        axios.post("http://localhost:3000/createUser", {resturant_name, location, speciality, fresh_seafood})
         .then(result => {
             console.log(result)
             navigate('/')
@@ -25,30 +25,30 @@ function CreateUser(){
                 <form onSubmit={Submit}>
                     <h2>Add Users</h2>
                     <div className="mb-2">
-                        <label htmlFor="">resturant_name </label>
-                        <input type="text" placeholder="Enter Name" className="form-control"
-                        onChange={(e)=>setName(e.target.value)}/>
+                        <label htmlFor="">Restaurant Name</label>
+                        <input type="text" placeholder="Enter name" className="form-control"
+                        onChange={(e)=>setResturantName(e.target.value)}/>
                     </div>
                     <div className="mb-2">
-                        <label htmlFor="">location </label>
+                        <label htmlFor="">Location</label>
                         <input type="text" placeholder="Enter location" className="form-control"
-                        onChange={(e)=>setlocation(e.target.value)}/>
+                        onChange={(e)=>setLocation(e.target.value)}/>
                     </div>
                     <div className="mb-2">
-                        <label htmlFor="">speciality </label>
-                        <input type="text" placeholder="Enter speciality" className="form-control"
-                        onChange={(e)=>setspeciality(e.target.value)}/>
+                        <label htmlFor="">Specialties</label>
+                        <input type="text" placeholder="Enter specialties" className="form-control"
+                        onChange={(e)=>setSpeciality(e.target.value)}/>
                     </div>
                     <div className="mb-2">
-                        <label htmlFor="">payment </label>
-                        <input type="text" placeholder="Enter payment" className="form-control"
-                        onChange={(e)=>setpayment(e.target.value)}/>
+                        <label htmlFor="">Fresh Seafood</label>
+                        <input type="text" placeholder="Enter fresh seafood" className="form-control"
+                        onChange={(e)=>setFreshSeafood(e.target.value)}/>
                     </div>
                     <button className="btn btn-success">Submit</button>
                 </form>
             </div>
         </div>
-    )
+    );
 }
 
 export default CreateUser;
