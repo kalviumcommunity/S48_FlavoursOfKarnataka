@@ -1,67 +1,60 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const UserModel = require('./models/Flavours');
+const { UserModel, schema } = require('./models/Flavours');
 const routes = require('./routes');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+const PORT = process.env.PORT || 3001;
 
-mongoose.connect("mongodb+srv://Bindhushree:Bindu%402005@cluster0.akxtu94.mongodb.net/?retryWrites=true&w=majority/Flavours_Of_Karnataka", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect("mongodb+srv://Bindhushree:Bindu%402005@cluster0.akxtu94.mongodb.net/Flavours_Of_Karnataka");
 
 app.use('/', routes);
 
 app.get('/', (req, res) => {
   UserModel.find({})
-    .then(users => res.json(users))
-    .catch(err => res.json(err));
-});
+  .then(users => res.json(users))
+  .catch(err => res.json(err))
+})
 
-app.get('/getUser/:id', (req, res) => {
+app.get('/getUser/:id', (req, res)=>{
   const id = req.params.id;
-  UserModel.findById(id)
-    .then(user => res.json(user))
-    .catch(err => res.json(err));
-});
+  UserModel.findById({_id:id})
+  .then(users => res.json(users))
+  .catch(err => res.json(err))
+})
 
-app.put('/updateUser/:id', (req, res) => {
-  const id = req.params.id;
-  UserModel.findByIdAndUpdate({_id:id}, {
-    restaurant_name: req.body.restaurant_name,
-    location: req.body.location,
-    specialities: req.body.specialities,
-    fresh_seafood: req.body.fresh_seafood,
-    variety_of_meat_preparation: req.body.variety_of_meat_preparation
-  }, { new: true })
-    .then(updatedUser => res.json(updatedUser))
-    .catch(err => res.status(500).json(err));
-});
-
-
-app.delete('/deleteUser/:id', (req, res) => {
-  const id = req.params.id;
-  UserModel.findByIdAndDelete(id)
-    .then(() => res.json({ success: true, message: "User deleted successfully" }))
-    .catch(err => res.status(500).json(err));
-});
-
-app.post("/createUser", async (req, res) => {
+app.post("/CreateUser", async (req, res) => {
   try {
-    const { restaurant_name, location, specialities, fresh_seafood, variety_of_meat_preparation } = req.body;
+    const { resturant_name, location, specialities, fresh_seafood, variety_of_meal_preparation, ambience } = req.body;
+
+    // Validate request body using Joi
+    const { error } = schema.validate({ resturant_name, location });
+    if (error) {
+      return res.status(400).send(error.details[0].message);
+    }
+
+    // Check if the resturant_name already exists
+    const userCheck = await UserModel.findOne({ resturant_name });
+    if (userCheck) {
+      return res.status(400).json({
+        success: false,
+        message: "resturant_name already exists",
+      });
+    }
 
     // Create a new user
     const newUser = new UserModel({
-      restaurant_name,
+      resturant_name,
       location,
       specialities,
       fresh_seafood,
-      variety_of_meat_preparation,
+      variety_of_meal_preparation,
+      ambience
+
     });
     await newUser.save();
 
