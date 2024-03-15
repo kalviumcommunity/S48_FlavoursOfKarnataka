@@ -7,7 +7,7 @@ export default function UserList() {
   const [users, setUsers] = useState([])
   
   useEffect(() => {
-    axios.get('http://localhost:3000')
+    axios.get('http://localhost:3001')
     .then(result => setUsers(result.data))
     .catch(err => console.log(err))
   },[])

@@ -3,7 +3,7 @@ import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 
 function CreateUser(){
-    const [resturant_name, setResturantName] = useState(""); // Corrected state variable name
+    const [restaurant_name, setRestaurantName] = useState("");
     const [location, setLocation] = useState("");
     const [speciality, setSpeciality] = useState("");
     const [fresh_seafood, setFreshSeafood] = useState("");
@@ -11,7 +11,7 @@ function CreateUser(){
 
     const Submit = (e) =>{
         e.preventDefault();
-        axios.post("http://localhost:3000/createUser", {resturant_name, location, speciality, fresh_seafood})
+        axios.post("http://localhost:3001/CreateUser", {restaurant_name, location, speciality, fresh_seafood})
         .then(result => {
             console.log(result)
             navigate('/')
@@ -27,7 +27,7 @@ function CreateUser(){
                     <div className="mb-2">
                         <label htmlFor="">Restaurant Name</label>
                         <input type="text" placeholder="Enter name" className="form-control"
-                        onChange={(e)=>setResturantName(e.target.value)}/>
+                        onChange={(e)=>setRestaurantName(e.target.value)}/>
                     </div>
                     <div className="mb-2">
                         <label htmlFor="">Location</label>
