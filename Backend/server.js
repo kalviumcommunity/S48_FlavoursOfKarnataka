@@ -1,61 +1,141 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const { UserModel, schema } = require('./models/Flavours');
+const { FlavoursModel, FlavoursValidation } = require('./models/Flavours');
+const {UserModel, UserValidation } = require('./models/user');
 const routes = require('./routes');
+require('dotenv').config();
 
 const app = express();
+const PORT = 3000;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
-const PORT = process.env.PORT || 3001;
 
-mongoose.connect("mongodb+srv://Bindhushree:Bindu%402005@cluster0.akxtu94.mongodb.net/Flavours_Of_Karnataka");
+// Connect to MongoDB
+mongoose.connect(process.env.DB_CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true });
 
+// Routes
 app.use('/', routes);
 
-app.get('/', (req, res) => {
-  UserModel.find({})
-  .then(users => res.json(users))
-  .catch(err => res.json(err))
-})
+app.get('/getFlavours', (req, res) => {
+  FlavoursModel.find({})
+    .then(Flavours => res.json(Flavours))
+    .catch(err => res.json(err));
+});
 
-app.get('/getUser/:id', (req, res)=>{
+app.get('/getUsers', (req, res) => {
+  UserModel.find()
+    .then(users => res.json(users))
+    .catch(err => res.json(err));
+});
+
+app.get('/getFlavours/:id', (req, res) => {
   const id = req.params.id;
-  UserModel.findById({_id:id})
-  .then(users => res.json(users))
-  .catch(err => res.json(err))
-})
+  FlavoursModel.findById({ _id: id })
+    .then(player => res.json(player))
+    .catch(err => res.json(err));
+});
 
-app.post("/CreateUser", async (req, res) => {
+app.get('/getUsers/:id', (req, res) => {
+  const id = req.params.id;
+  UserModel.findById({ _id: id })
+    .then(user => res.json(user))
+    .catch(err => res.json(err));
+});
+
+app.put('/UpdateUser/:id', (req, res) => {
+  const id = req.params.id;
+  UserModel.findByIdAndUpdate({_id:id}, req.body, { new: true })
+    .then(updatedUser => res.json(updatedUser))
+    .catch(err => res.status(500).json(err));
+});
+
+app.put('/updateFlavours/:id', (req, res) => {
+  const id = req.params.id;
+  FlavoursModel.findByIdAndUpdate(id, req.body, { new: true })
+    .then(updatedFlavour => res.json(updatedFlavour))
+    .catch(err => res.status(500).json(err));
+});
+
+app.delete('/deleteFlavours/:id', (req, res) => {
+  const id = req.params.id;
+  FlavoursModel.findByIdAndDelete(id)
+    .then(result => res.json(result))
+    .catch(err => res.json(err));
+});
+
+app.delete('/deleteUser/:id', (req, res) => {
+  const id = req.params.id;
+  UserModel.findByIdAndDelete(id)
+    .then(result => res.json(result))
+    .catch(err => res.json(err));
+});
+
+app.post('/Login', async (req, res) => {
   try {
-    const { resturant_name, location, specialities, fresh_seafood, variety_of_meal_preparation, ambience } = req.body;
-
-    // Validate request body using Joi
-    const { error } = schema.validate({ resturant_name, location });
+    const { error, value } = UserValidation.validate(req.body);
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
 
-    // Check if the resturant_name already exists
-    const userCheck = await UserModel.findOne({ resturant_name });
-    if (userCheck) {
+    const { username, password } = value;
+    const user = await UserModel.findOne({ username });
+
+    if (!user || user.password !== password) {
+      return res.status(401).json({ success: false, message: "Invalid username or password" });
+    }
+
+    res.json({ success: true, message: "Login successful" });
+  } catch (error) {
+    console.error("Error during login:", error);
+    res.status(500).json({ success: false, message: "An error occurred during login" });
+  }
+});
+
+app.post("/createFlavours", async (req, res) => {
+  try {
+    const { restaurant_name, Location, Specialities, Fresh_seafood,Variety_of_meal_preparation} = req.body;
+    const { error } = FlavoursValidation.validate(req.body);
+    if (error) {
+      return res.status(400).send(error.details[0].message);
+    }
+
+    const newPlayer = new FlavoursModel({ restaurant_name, Location, Specialities, Fresh_seafood, Variety_of_meal_preparation });
+    await newPlayer.save();
+
+    res.json({
+      success: true,
+      message: "Player created successfully",
+      player: newPlayer,
+    });
+  } catch (error) {
+    console.error("Error creating player:", error);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while creating the player",
+    });
+  }
+});
+
+app.post("/Createuser", async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    const { error } = UserValidation.validate({ username, email, password });
+    if (error) {
+      return res.status(400).send(error.details[0].message);
+    }
+
+    const Flavourscheck = await UserModel.findOne({ username });
+    if (Flavourscheck) {
       return res.status(400).json({
         success: false,
-        message: "resturant_name already exists",
+        message: "Username Already exists",
       });
     }
 
-    // Create a new user
-    const newUser = new UserModel({
-      resturant_name,
-      location,
-      specialities,
-      fresh_seafood,
-      variety_of_meal_preparation,
-      ambience
-
-    });
+    const newUser = new UserModel({ username, email, password });
     await newUser.save();
 
     res.json({
@@ -64,7 +144,6 @@ app.post("/CreateUser", async (req, res) => {
       user: newUser,
     });
   } catch (error) {
-    // Handle any unexpected errors
     console.error("Error creating user:", error);
     res.status(500).json({
       success: false,
@@ -73,8 +152,10 @@ app.post("/CreateUser", async (req, res) => {
   }
 });
 
+// Default 404 route
 app.use((req, res) => res.status(404).send('Not found'));
 
+// Start server
 app.listen(PORT, () => {
   console.log(`🚀Server is running on port ${PORT}`);
 });

@@ -43,7 +43,6 @@ router.put('/resource/:id', (req, res) => {
   });
 });
 
-// Delete
 router.delete('/resource/:id', (req, res) => {
   execFile('bruno', ['docs.bruno/delete.bru'], (error, stdout, stderr) => {
     if (error) {
