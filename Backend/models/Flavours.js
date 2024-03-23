@@ -1,24 +1,23 @@
-const mongoose = require("mongoose");
-const Joi = require("joi")
+const mongoose = require('mongoose');
+const Joi = require('joi');
 
-const UserSchema = new mongoose.Schema({
-    restaurant_name: String,
-    location: String,
-    specialities: String,
-    fresh_seafood: String,
-    variety_of_meat_preparation: String,
-    ambience: String,
-})
-
-const UserModel = mongoose.model("users", UserSchema)
-const schema = Joi.object({
-    restaurant_name: Joi.string().required(),
-    location: Joi.string().required(),
-    specialities: Joi.string().required(),
-    variety_of_meat_preparation: Joi.string().required(),
-    ambience: Joi.string().required()
+const FlavoursSchema = new mongoose.Schema({
+  restaurant_name:String,
+  Location: String,
+  Specialities: String,
+  Fresh_seafood: String,
+  Variety_of_meal_preparation: String
+   
 });
-module.exports = {
-    UserModel,
-    schema
-};
+const FlavoursValidation = Joi.object({
+  restaurant_name: Joi.string() .required(),
+  Location: Joi.string() .required(),
+  Specialities: Joi.string() .required(),
+  Fresh_seafood: Joi.string() .required(),
+  Variety_of_meal_preparation: Joi.string() .required()
+   
+});
+
+const FlavoursModel = mongoose.model('data', FlavoursSchema);
+
+module.exports = { FlavoursModel, FlavoursValidation };
