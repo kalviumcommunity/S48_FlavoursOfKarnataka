@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './SignUp.css'
-
+import axios from 'axios';
 function SignUp() {
   const navigate = useNavigate();
 
@@ -9,7 +9,6 @@ function SignUp() {
     UserName: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
 
   const handleChange = (e) => {
@@ -20,12 +19,18 @@ function SignUp() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-
-    navigate("/");
+    try {
+      const response = await axios.post("http://localhost:3000/Createuser", formData);
+      console.log(response.data);
+      navigate("/");
+    } catch (error) {
+      console.error('Error creating user:', error.message);
+      // Handle error, show error message to user, etc.
+    }
   };
+
 
   return (
     <div className="container">
@@ -61,21 +66,6 @@ function SignUp() {
             placeholder="Enter your password"
             value={formData.password}
             onChange={handleChange}
-            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{10,}"
-            title="Password must contain at least 10 characters, including at least One Number, One Uppercase letter, One Lowercase letter and one Special Character."
-            required
-          />
-
-          <label htmlFor="confirmPassword">Confirm Password:</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            placeholder="Confirm your password"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            pattern={formData.password}
-            title="Passwords must match"
             required
           />
 

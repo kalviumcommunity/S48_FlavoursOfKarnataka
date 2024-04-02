@@ -2,10 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const { FlavoursModel, FlavoursValidation } = require('./models/Flavours');
-const {UserModel, UserValidation } = require('./models/user');
+const {UserModel, UsersValidation } = require('./models/user');
 const routes = require('./routes');
 require('dotenv').config();
-
+const Joi = require('joi');
+const LoginValidation = require('./models/login')
 const app = express();
 const PORT = 3000;
 
@@ -14,7 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect(process.env.DB_CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.DB_CONNECTION_STRING);
 
 // Routes
 app.use('/', routes);
@@ -75,19 +76,15 @@ app.delete('/deleteUser/:id', (req, res) => {
 
 app.post('/Login', async (req, res) => {
   try {
-    const { error, value } = UserValidation.validate(req.body);
-    if (error) {
-      return res.status(400).send(error.details[0].message);
-    }
-
-    const { username, password } = value;
-    const user = await UserModel.findOne({ username });
+    const { UserName,email, password } = req.body;
+    const validate = await LoginValidation.validateAsync(req.body)
+    const user = await UserModel.findOne({ UserName:validate.UserName,email:validate.email,password:validate.password });
 
     if (!user || user.password !== password) {
-      return res.status(401).json({ success: false, message: "Invalid username or password" });
+      return res.status(401).json({ success: false, message: "Invalid UserName or password" });
     }
-
-    res.json({ success: true, message: "Login successful" });
+    
+    res.json({ success: true, message: "Login successfull" });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ success: false, message: "An error occurred during login" });
@@ -121,21 +118,12 @@ app.post("/createFlavours", async (req, res) => {
 
 app.post("/Createuser", async (req, res) => {
   try {
-    const { username, email, password } = req.body;
-    const { error } = UserValidation.validate({ username, email, password });
-    if (error) {
+    const { UserName, email, password } = req.body;
+    const { error } = UsersValidation.validate({ UserName, email, password });
+    if (error){
       return res.status(400).send(error.details[0].message);
     }
-
-    const Flavourscheck = await UserModel.findOne({ username });
-    if (Flavourscheck) {
-      return res.status(400).json({
-        success: false,
-        message: "Username Already exists",
-      });
-    }
-
-    const newUser = new UserModel({ username, email, password });
+    const newUser = new UserModel({ UserName, email, password });
     await newUser.save();
 
     res.json({
