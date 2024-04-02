@@ -2,18 +2,16 @@ const mongoose = require('mongoose');
 const Joi = require('joi');
 
 const UserSchema = new mongoose.Schema({
-  firstName: String,
-  lastName: String,
+  UserName: String,
   email: String,
-  password: String 
+  password: String,
 });
-const UserstValidation = Joi.object({
-  firstName: Joi.string() .required(),
-  lastName: Joi.string() .required(),
+const UsersValidation = Joi.object({
+  UserName: Joi.string() .required(),
   email: Joi.string() .required(),
   password: Joi.string() .required() 
 });
 
-const UserModel = mongoose.model('user', UserSchema);
+const UserModel = mongoose.model('users', UserSchema);
 
-module.exports = { UserModel, UserstValidation };
+module.exports = { UserModel, UsersValidation };

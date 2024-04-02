@@ -1,59 +1,62 @@
 import React, { useState } from "react";
 import "./Login.css";
+import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 
 function Login() {
   const navigate = useNavigate()
   const [field, setField] = useState({
-    userName:"", 
+    UserName:"", 
     email:"",
     password:"" 
   });
-  const [submitted, setSubmit] = useState(false);
-  const [validate, setValidation] = useState(false);
 
-  const handleSubmit = (e) => {
+  function setCookie(name, value, daysToExpire) {
+    let date = new Date();
+    date.setTime(date.getTime() + daysToExpire * 24 * 60 * 60 * 1000);
+    document.cookie =
+      name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
+  }
+
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    if (field.userName && field.email && field.password ) {
-      if (field.password ) {
-        if (validateEmail(field.email)) {
-          setValidation(true);
-          navigate("/home")
-        } else {
-          setValidation(false);
-        }
+    try {
+      const response = await axios.post("http://localhost:3000/Login", {UserName:field.UserName,email:field.email,password:field.password});
+      if (response.data.success) {
+        // Login successful, redirect to home page or dashboard
+        navigate("/UserData");
+        setCookie('username',field.UserName)
       } else {
-        setValidation(false);
+        // Login failed, handle error or show error message
+        console.error("Login failed:", response.data.message);
+        // Display error message to the user
       }
+    } catch (error) {
+      console.error("Error during login:", error);
+      // Handle error, show error message to the user, etc.
     }
-    setSubmit(true);
   };
 
-  const validateEmail = (email) => {
-    const re = /\S+@\S+\.\S+/;
-    return re.test(email);
-  };
 
   return (
     <div className="center-container"> 
       <div className="form-container">
         <form className="register-form" onSubmit={(e)=>{e.preventDefault();
-          if(field.userName && field.email && field.password)setValidation(true);
+          if(field.UserName && field.email && field.password)setValidation(true);
           setSubmit(true)}}>
 
-          {submitted && validate?<div className="success-message">Registration successful!</div>:null}
+          
 
           <input
-            id="username" 
+            id="UserName" 
             className="form-field"
             type="text"
-            placeholder="Username" 
-            name="username" 
-            value={field.userName} 
-            onChange={(e)=>{setField({...field, userName:e.target.value})}} 
+            placeholder="UserName" 
+            name="UserName" 
+            value={field.UserName} 
+            onChange={(e)=>{setField({...field, UserName:e.target.value})}} 
           />
 
-          {submitted && !field.userName ?<span>Please enter your username</span>:null}
         
           <input
             id="email"
@@ -65,7 +68,6 @@ function Login() {
             onChange={(e)=>{setField({...field, email:e.target.value})}}
           />
 
-          {submitted && !field.email ?<span>Please enter your email</span>:null}
 
           <input
             id="password" 
@@ -77,7 +79,6 @@ function Login() {
             onChange={(e)=>{setField({...field, password:e.target.value})}} 
           />
 
-          {submitted && !field.password ?<span>Please enter your password</span>:null}
 
           <button className="form-field" type="submit" onClick={handleSubmit}>
             Submit

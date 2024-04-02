@@ -2,10 +2,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import './UserData.css'; 
-
+import { useNavigate } from "react-router-dom";
 export default function UserList() {
   const [users, setUsers] = useState([]);
-  
+  const navigate = useNavigate()
   useEffect(() => {
     axios.get('http://localhost:3000/getFlavours')
     .then(result => setUsers(result.data))
@@ -24,10 +24,16 @@ export default function UserList() {
       }); 
   };
 
+  const handleLogout = ()=>{
+    document.cookie = 'username=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/';
+    navigate('/')
+  }
+
   return (
     <div className="w-100 vh-100 d-flex justify-content-center align-items-center text-align-center">
       <div className="w-50">
         <Link to="/create" className='btn btn-success'> Add +</Link>
+        <button onClick={handleLogout}>Logout</button>
         <table className="table">
           <thead>
             <tr>

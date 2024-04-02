@@ -10,16 +10,14 @@ import UpdateUser from "./component/UpdateUser";
 function App(){
 
   return (
-    <Router>
       <Routes>
-        <Route path="*" element={<MainPage />} />
+        <Route path="/" element={<MainPage />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/UserData" element={<UserData />} />
         <Route path="/login" element={<Login />} />
         <Route path="/create" element={<Createuser/>}/>
         <Route path="/update/:id" element={<UpdateUser/>}/>
       </Routes>
-    </Router>
   );
 }
 
