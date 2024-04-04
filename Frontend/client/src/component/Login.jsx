@@ -26,6 +26,7 @@ function Login() {
         // Login successful, redirect to home page or dashboard
         navigate("/UserData");
         setCookie('username',field.UserName)
+        setCookie('accesstoken',response.data.accessToken)
       } else {
         // Login failed, handle error or show error message
         console.error("Login failed:", response.data.message);

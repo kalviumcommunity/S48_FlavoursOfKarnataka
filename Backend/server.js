@@ -9,7 +9,8 @@ const Joi = require('joi');
 const LoginValidation = require('./models/login')
 const app = express();
 const PORT = 3000;
-
+const Jwt= require('jsonwebtoken')
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -79,12 +80,12 @@ app.post('/Login', async (req, res) => {
     const { UserName,email, password } = req.body;
     const validate = await LoginValidation.validateAsync(req.body)
     const user = await UserModel.findOne({ UserName:validate.UserName,email:validate.email,password:validate.password });
-
+    const accessToken = Jwt.sign({password},JWT_SECRET_KEY)
     if (!user || user.password !== password) {
       return res.status(401).json({ success: false, message: "Invalid UserName or password" });
     }
     
-    res.json({ success: true, message: "Login successfull" });
+    res.json({ success: true, message: "Login successfull",accessToken:accessToken });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ success: false, message: "An error occurred during login" });
