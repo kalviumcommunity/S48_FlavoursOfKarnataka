@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from 'axios'
+import './Createuser.css';
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie"
 
 function CreateUser(){
     const [restaurant_name, setRestaurant_name] = useState("");
@@ -18,11 +20,12 @@ function CreateUser(){
             Location: Location,
             Specialities: Specialities,
             Fresh_seafood: Fresh_seafood,
-            Variety_of_meal_preparation : Variety_of_meal_preparation
+            Variety_of_meal_preparation : Variety_of_meal_preparation,
+            UserName: Cookies.get("username")
         })
         .then(result => {
             console.log(result)
-            navigate('/Users')
+            navigate('/')
         })
         .catch(err => console.log(err))
     }

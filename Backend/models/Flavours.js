@@ -6,7 +6,8 @@ const FlavoursSchema = new mongoose.Schema({
   Location: String,
   Specialities: String,
   Fresh_seafood: String,
-  Variety_of_meal_preparation: String
+  Variety_of_meal_preparation: String,
+  UserName: String
    
 });
 const FlavoursValidation = Joi.object({
@@ -14,7 +15,8 @@ const FlavoursValidation = Joi.object({
   Location: Joi.string() .required(),
   Specialities: Joi.string() .required(),
   Fresh_seafood: Joi.string() .required(),
-  Variety_of_meal_preparation: Joi.string() .required()
+  Variety_of_meal_preparation: Joi.string() .required(),
+  UserName: Joi.string() .required()
    
 });
 

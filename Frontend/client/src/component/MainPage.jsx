@@ -18,10 +18,8 @@ function RestaurantWebsite() {
       </div>
       <div className="content">
         <div className="description">
-          <h2>Description of NON-VEG:</h2>
-          <p>Food is for living but for non-vegetarian it is one of the best feeling to have a spicy and delicious tandoori, chicken curry, biryani
-            <br /> and all those make an non-vegetarian a satisfactory feel...
-          </p>
+          <p>"Dive into a flavor-packed journey! Non-vegetarians, rejoice in the sizzle of tandoori, the aroma of chicken curry, and the spice of biryani.<br/>
+           Let your taste buds dance and your cravings be satisfied!"</p>
         </div>
       </div>
       <Routes><Route path='/SignUp' element={<SignUp />}/></Routes> 

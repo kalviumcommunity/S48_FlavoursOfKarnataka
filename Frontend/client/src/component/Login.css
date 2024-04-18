@@ -1,45 +1,58 @@
-.center-container {
-  display: flex;
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: url('https://images.creativemarket.com/0.1.0/ps/7353024/1820/965/m1/fpnw/wm1/ahp0l9ecx0vfwsdo1rwxcdtynfyzn4gweomwnblntp5glupfrmnapoab88tzxyjd-.jpg?1574572829&s=b8ffc3e573cf00451539ee4b954ba3c0') center/cover fixed;
+  height: 100vh;
+  display: flex; 
   justify-content: center;
   align-items: center;
-  height: 100vh;
 }
 
 .form-container {
-  width: 300px;
+  background-color: rgba(255, 255, 255, 0.8);
   padding: 20px;
-  background-color: #f0f0f0;
-  border-radius: 8px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  width: 300px; 
 }
 
 .register-form {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .form-field {
-  margin-bottom: 15px;
+  width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  margin: 5px 0;
+  border: 1px solid #d3d3d3;
   border-radius: 5px;
-  font-size: 16px;
+  box-sizing: border-box;
 }
 
 .form-field:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: #4CAF50;
 }
 
-.success-message {
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: #dff0d8;
-  border: 1px solid #c3e6cb;
+button.form-field {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
   border-radius: 5px;
-  color: #28a745;
 }
 
-span {
+button.form-field:hover {
+  background-color: #45a049;
+}
+
+.error-message {
   color: red;
+  margin-top: 5px;
+  text-align: center;
 }
