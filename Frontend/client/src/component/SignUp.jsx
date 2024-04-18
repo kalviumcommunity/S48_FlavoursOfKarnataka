@@ -11,6 +11,14 @@ function SignUp() {
     password: "",
   });
 
+  function setCookie(name, value, daysToExpire) {
+    let date = new Date();
+    date.setTime(date.getTime() + daysToExpire * 24 * 60 * 60 * 1000);
+    document.cookie =
+      name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
+  }
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -22,9 +30,17 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/Createuser", formData);
-      console.log(response.data);
-      navigate("/");
+      const response = await axios.post("http://localhost:3000/Createuser", {UserName:formData.UserName,email:formData.email,password:formData.password});
+      if (response.data.success) {
+        // Login successful, redirect to home page or dashboard
+        navigate("/UserData");
+        setCookie('username',formData.UserName)
+        setCookie('accesstoken',response.data.accessToken)
+      } else {
+        // Login failed, handle error or show error message
+        console.error("Login failed:", response.data.message);
+        // Display error message to the user
+      }
     } catch (error) {
       console.error('Error creating user:', error.message);
       // Handle error, show error message to user, etc.

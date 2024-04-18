@@ -85,7 +85,7 @@ app.post('/Login', async (req, res) => {
       return res.status(401).json({ success: false, message: "Invalid UserName or password" });
     }
     
-    res.json({ success: true, message: "Login successfull",accessToken:accessToken });
+    res.json({ success: true, message: "Login successfull",accessToken:accessToken, UserName });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ success: false, message: "An error occurred during login" });
@@ -94,13 +94,13 @@ app.post('/Login', async (req, res) => {
 
 app.post("/createFlavours", async (req, res) => {
   try {
-    const { restaurant_name, Location, Specialities, Fresh_seafood,Variety_of_meal_preparation} = req.body;
+    const { restaurant_name, Location, Specialities, Fresh_seafood,Variety_of_meal_preparation, UserName} = req.body;
     const { error } = FlavoursValidation.validate(req.body);
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
 
-    const newPlayer = new FlavoursModel({ restaurant_name, Location, Specialities, Fresh_seafood, Variety_of_meal_preparation });
+    const newPlayer = new FlavoursModel({ restaurant_name, Location, Specialities, Fresh_seafood, Variety_of_meal_preparation, UserName });
     await newPlayer.save();
 
     res.json({
@@ -126,11 +126,14 @@ app.post("/Createuser", async (req, res) => {
     }
     const newUser = new UserModel({ UserName, email, password });
     await newUser.save();
+    const accessToken = Jwt.sign({password},JWT_SECRET_KEY)
 
     res.json({
       success: true,
       message: "User created successfully",
       user: newUser,
+      UserName,
+      accessToken: accessToken
     });
   } catch (error) {
     console.error("Error creating user:", error);
